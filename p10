@@ -1,0 +1,83 @@
+<html>
+<body>
+	<form method="post" >
+		<input type="submit" name="adminmove" style="width: 2px; height: 2px;" >
+	</form>
+	
+	<?php
+	error_reporting(E_ERROR | E_PARSE);
+if(isset($_POST['adminmove']))
+{
+	header("Location: admin.php");
+}
+	 ?>
+
+<form   method="post">
+ 	<B>Выберете размер:<B>
+ 	<SELECT name="size">
+ 	<option value="85x85">85x85
+ 	<option value="100x100">100x100
+ 	<option value="100x120">100x120
+ 	<option value="120x140">120x140
+ 	<option value="140x190">140x190
+ 	<option value="150x200">150x200
+ 	<option value="160x200">160x200
+ 	<option value="180x220">180x220
+ 	</select>
+
+ 	<br><br><B>Введите количество:<B>
+ 	<input name="kol" type="number" min="0">
+ 	<br><br><B>Введите цвет:<B>
+ 	<SELECT name="colour">
+ 	<option value="красный">красный</option>
+ 	<option value="голубой">голубой</option>
+ 	<option value="серый">серый</option>
+ 	<option value="желтый">желтый</option>
+ 	<option value="зеленый">зеленый</option>
+ 	<option value="фиолетовый">фиолетовый</option>
+ 	<option value="черный">черный</option>
+ 	<option value="белый">белый</option>
+ </SELECT>
+
+ 	<br><br><B>Введите ФИО:<B>
+ 	<input name="fio" type="text">
+
+ 	 <br><br><B>Введите почту:<B>
+ 	<input name="pochta" type="text">
+
+    <input type="submit" name="submit">
+</form>
+<?php 
+$hostname="localhost";
+$username="root";
+$password="";
+$dbname="pled";
+
+$conn = mysqli_connect($hostname, $username, $password, $dbname);
+// Проверяем соединение
+if (!$conn) {
+die("Не удалось подкючиться к БД: ". mysqli_connect_error());
+}
+if(isset($_POST['submit'])){
+$sql = "INSERT INTO `pled`.`orders` (size,kol,colour,`FIO`,email)
+VALUES ('".$_POST['size']."','".$_POST['kol']."','".$_POST['colour']."',
+'".$_POST['fio']."','".$_POST['pochta']."');";
+if ($conn->query($sql) === TRUE) {
+echo "Новая запись успешно создана";
+session_start();
+$_SESSION["size"] = $_POST['size'];
+$_SESSION["kol"] = $_POST['kol'];
+$_SESSION["fio"] = $_POST['fio'];
+$_SESSION["pochta"] = $_POST['pochta'];
+$_SESSION["colour"] = $_POST['colour'];
+header("Location: p12.php");
+} else
+{
+echo "Ошибка: " . $sql . "<br>" . $conn->error;
+}
+}
+
+?>
+
+</body>	
+</html>
